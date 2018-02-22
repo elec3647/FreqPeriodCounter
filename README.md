@@ -1,11 +1,16 @@
 FreqPeriodCounter
 ================
+A fork:
 
-Frequency Counter Library
-Version 28-5-2013
-Copyright (C) 2011  Albert van Dalen http://www.avdweb.nl
+> [https://github.com/pkourany/FreqPeriodCounter](https://github.com/pkourany/FreqPeriodCounter)
 
-Refer to http://www.avdweb.nl/arduino/hardware-interfacing/frequency-period-counter.html for details
+Of a fork:
+
+> Frequency Counter Library
+> Version 28-5-2013
+> Copyright (C) 2011  Albert van Dalen http://www.avdweb.nl
+> 
+> Refer to http://www.avdweb.nl/arduino/hardware-interfacing/frequency-period-counter.html for details
 
 ``` 
 Release Notes
@@ -18,16 +23,16 @@ Release Notes
 18-11-2014 Adapted for Spark Core by Paul Kourany
 
 
-			<------------- period ------------>
-				pulseWidth
-				_____________                      ______________                     
-			||             ||                  ||              ||  
-			||             ||  pulseWidthLow   ||              ||              |
-______________||             ||__________________||              ||______________|
-		
+               <------------- period ------------>
+                  pulseWidth
+               ________________                  __________________                     
+               ||            ||                  ||              ||  
+               ||            ||  pulseWidthLow   ||              ||
+_______________||            ||__________________||              ||_____________|
+
 transientCount 1             2                   1               2               1
-transientTime ^              ^                   ^               ^
+transientTime  ^             ^                   ^               ^
 level                1                 0                  1                0       
 debounceTime  <-->           <-->                <-->            <--> 
-																<- elapsedTime ->
+                                                                 <- elapsedTime ->
 ```
