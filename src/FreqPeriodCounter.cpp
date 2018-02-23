@@ -1,7 +1,7 @@
 /* FreqPeriodCounter
 * Version 28-5-2013
 * Copyright (C) 2011  Albert van Dalen http://www.avdweb.nl
-* 
+*
 * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
@@ -13,27 +13,27 @@ Release Notes
 17-12-2011 New function ready()
 22-04-2012 poll() counts all transients instead of low-high transients
 5-5-2013 if(transientCount >= 2) // the first 2 measurements are invalid
-28-5-2013 measurements are valid from start, added synchronize() 
+28-5-2013 measurements are valid from start, added synchronize()
 
 
 			<------------- period ------------>
 				pulseWidth
-				_____________                      ______________                     
-			||             ||                  ||              ||  
+			_____________                      ______________                     
+			||             ||                  ||              ||
 			||             ||  pulseWidthLow   ||              ||              |
 ______________||             ||__________________||              ||______________|
-		
+
 transientCount 1             2                   1               2               1
 transientTime ^              ^                   ^               ^
-level                1                 0                  1                0       
-debounceTime  <-->           <-->                <-->            <--> 
+level                1                 0                  1                0
+debounceTime  <-->           <-->                <-->            <-->
 																<- elapsedTime ->
 */
 
 #include "FreqPeriodCounter.h"
 
 FreqPeriodCounter::FreqPeriodCounter(byte pin, unsigned long (*timeFunctionPtr)(), unsigned debounceTime):
-pin(pin), debounceTime(debounceTime), timeFunctionPtr(timeFunctionPtr) 
+pin(pin), debounceTime(debounceTime), timeFunctionPtr(timeFunctionPtr)
 {
 	synchronize();
 }
@@ -41,22 +41,22 @@ pin(pin), debounceTime(debounceTime), timeFunctionPtr(timeFunctionPtr)
 boolean FreqPeriodCounter::poll()
 {
 	time = timeFunctionPtr();
-	elapsedTime = time - transientTime; 
+	elapsedTime = time - transientTime;
 	level = digitalRead(pin);
 	boolean returnVal = false;
 	if((level != lastLevel) && (elapsedTime > debounceTime)) // if transient
 	{
 		transientCount++;
 		lastLevel = level;
-		transientTime = time;   
+		transientTime = time;
 		if(level == HIGH)
 			pulseWidthLow = elapsedTime;
 		else
-			pulseWidth = elapsedTime;  
-		if(transientCount >= 2) 
+			pulseWidth = elapsedTime;
+		if(transientCount >= 2)
 		{
 			period = pulseWidth + pulseWidthLow;
-			transientCount = 0; 
+			transientCount = 0;
 			readyVal = true;
 			returnVal = true; // return true if a complete period is measured
 		}
@@ -66,7 +66,7 @@ boolean FreqPeriodCounter::poll()
 
 boolean FreqPeriodCounter::ready()
 {
-	boolean returnVal = readyVal; 
+	boolean returnVal = readyVal;
 	readyVal = false; // reset after read
 	return returnVal;
 }
